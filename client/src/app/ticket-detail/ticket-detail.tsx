@@ -12,13 +12,16 @@ const { Option } = Select;
 
 export function TicketDetail() {
   const { id } = useParams();
-  const ticketId = Number(id) ?? null;
+  const ticketId = id ? Number(id) : null;
+  if (!ticketId) {
+    return <div style={{ textAlign: "center", color: "red" }}>Ticket not found</div>;
+  }
   const [isCompleted, setIsCompleted] = useState<boolean>();
 
   const queryClient = useQueryClient();
-  const { data: ticket, isLoading: isTicketLoading } = useQuery<Ticket>({
-    queryKey: ["ticket", id],
-    queryFn: () => ticketsAPI.getTicketDetail(ticketId),
+  const { data: ticket, isLoading: isTicketLoading, error: isTicketError } = useQuery<Ticket>({
+    queryKey: ["ticket", ticketId],
+    queryFn: () =>  ticketsAPI.getTicketDetail(ticketId),
     enabled: !!ticketId,
   })
 
@@ -50,7 +53,7 @@ export function TicketDetail() {
         ...ticket,
         completed: value
       }
-    }
+    },
   });
 
   const onChangeAssign = (value: number) => {
@@ -78,7 +81,7 @@ export function TicketDetail() {
     return <Spin tip="Loading..." />;
   }
 
-  if (!ticket) {
+  if (isTicketError) {
     return <div style={{ textAlign: "center", color: "red" }}>Error loading ticket.</div>;
   }
 
@@ -98,7 +101,7 @@ export function TicketDetail() {
           <Meta
             avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />}
             title={
-              ticket.description ? (
+              ticket?.description ? (
                 <Space direction="vertical" style={{ width: "100%", gap: 8 }}>
                   <Row align="middle" gutter={8}>
                     <Col>

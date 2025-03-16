@@ -12,9 +12,9 @@ const root = ReactDOM.createRoot(
 const queryClient = new QueryClient()
 
 root.render(
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
       <App />
-    </QueryClientProvider>
-  </BrowserRouter>
+    </BrowserRouter>
+  </QueryClientProvider>
 );

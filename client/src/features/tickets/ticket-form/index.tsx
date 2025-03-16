@@ -57,7 +57,7 @@ const TicketForm = ({ isOpen, onClose }: TicketFormProps): JSX.Element => {
                     name="description"
                     rules={[{ required: true, message: 'Please input description!' }]}
                 >
-                    <Input value={form.getFieldValue("description")} />
+                    <Input />
                 </Form.Item>
             </Form>
         </Modal>

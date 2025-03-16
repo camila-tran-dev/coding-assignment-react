@@ -4,13 +4,11 @@ const API_URL = "api/tickets";
 
 const ticketsAPI = {
   getTickets: async (): Promise<Ticket[]> => {
-    try {
-      const response = await fetch(API_URL);
-      return response.json();
-    } catch (error) {
-      console.error(error);
-      return [];
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("Failed to fetch tickets");
     }
+    return response.json();
   },
 
   getTicketDetail: async (ticketId: number): Promise<Ticket> => {
@@ -27,6 +25,9 @@ const ticketsAPI = {
       },
       body: JSON.stringify({ description }),
     });
+    if (!response.ok) {
+      throw new Error("Failed to create ticket");
+    }
     return response.json();
   },
 
